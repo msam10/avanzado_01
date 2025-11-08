@@ -1,5 +1,4 @@
 
-import './App.css'
 import Carta from './components/Carta'
 import CartaProyecto from './components/CartaProyecto';
 
@@ -9,7 +8,7 @@ function App() {
   }
 
   return (
-    <div>
+    <div className='bg-blue-200 text-1xl text-center'>
       <h1>mi primer proyecto en react </h1>
       <p>por: samantha Mendez</p>
       <p>aguante one piece</p>
@@ -23,10 +22,11 @@ function App() {
        ataque={1000}
        nombre="Luffy"
        defensa={90}
-       descripcion="Luffy,usuario de la fruta del diablo; hito hito no mi, modelo:NIKA"
+       descripcion="Luffy,usuario de la fruta del diablo 
+        hito hito no mi."
        imagen="https://i.redd.it/lhdd2872qurb1.jpg"
        numero={1}
-       tipo="Logia"
+       tipo="ataque fisico/ofensivo"
        
        />
     </div>
