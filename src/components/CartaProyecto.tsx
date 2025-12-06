@@ -32,6 +32,9 @@ return (
        <p>descripcion:{descripcion}</p>
        <p>tripulacion:{tripulacion}</p>
       
+
+      
+
     </div>
 )
 }
