@@ -13,6 +13,7 @@ useEffect(() => {
 
 }, [count]);
 
+console.log(EsPar)
 return (
  <div className="w-screen text-[#FCFCFD] bg-[#3843D0] h-screen flex flex-col justify-center items-center py-10 px-4">
  <h1 className="text-3xl mb-6 font-semibold">Contador Educa</h1>
