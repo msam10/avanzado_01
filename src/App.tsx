@@ -1,189 +1,122 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from "react";
 
+
+interface Pokemon {
+ id: number;
+ name: string;
+ sprites: {
+   other: {
+     "official-artwork": {
+       front_default: string;
+     };
+   };
+ };
+ types: {
+   slot: number;
+   type: {
+     name: string;
+   };
+ }[];
+ height: number;
+ weight: number;
+}
 
 
 function App() {
-  const [card,setCard] = useState({
-   nombre:"",
-   descripcion:"",
-   numero:0,
-    tipo:"",
-    ataque:0,
-    defensa:0,
-    imagen:"",
-  });
-
-  const [errors,setErrors] = useState({
-     nombre:"",
-   descripcion:"",
-   numero:"",
-    tipo:"",
-    ataque:"",
-    defensa:"",
-    imagen:"",
-});
-
- const validateCard = (): boolean => {
-      let flag = true;
-      let nombreError = "";
-      let descripcionError = "";
-      let ataqueError = "";
-      let defensaError = "" ;
-      let tipoError = "";
-      let imagenError = "";
-
-      if(!card.nombre || card.nombre.length < 3 ) {
-        nombreError = "El nombre debe de tener al menos 3 caracteres";
-        flag = false;
-
-      }
-      if(!card.descripcion) {
-      descripcionError = "La descripcion es obligatoria";
-      flag = false;
-
-      }
-      if(!card.ataque || isNaN(card.ataque) || Number(card.ataque) < 0 ) {
-       ataqueError = "El ataque debe ser un numero positivo";
-      flag = false;
-
-      }
-      if(!card.defensa || isNaN(card.defensa) || Number(card.defensa) < 0 ) {
-       defensaError = "El defensa debe ser un numero positivo";
-      flag = false;
-
-      }
-      if(!card.tipo) {
-      tipoError = "El tipo es obligatorio";
-      flag = false;
-    
-      }
-      if(!card.imagen) {
-      imagenError = "La URL de la imagen es obligatoria";
-      window.alert(imagenError)
-      flag = false;
-    
-      }
-
-       setErrors({
-        nombre:nombreError,
-        descripcion:descripcionError,
-        tipo:tipoError,
-        ataque:ataqueError,
-        defensa:defensaError,
-        imagen:imagenError,
-        numero:'',
-      
-      });
-
-      return flag;
-    };
-
-    const handleSubmit = () => {
-    
-     if(validateCard()){
-      alert("enviando carta...");
-     }
+ const [pokemon, setPokemon] = useState<Pokemon | null>(null);
+ const [loading, setLoading] = useState(true);
 
 
-    };
-
-    <button
-     className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
-     onClick={handleSubmit}
-    >
-      validar
-    </button>
-
-   
+ useEffect(() => {
+   getPokemon();
+ }, []);
 
 
-  return (
-     <div>
-     <input type="text"
-     placeholder="nombre"
-     className="border-2 border-indigo-500 outline-0 focus:border-indigo-700 rounder-nd p-2 w-full max-w-nd "
-     value={card.nombre}
-     onChange={(e) => setCard({...card , nombre: e.target.value})}
-     />
-
-     {errors.nombre && <p className="text-red-500">{errors.nombre}</p>}
-
-     <input type="text"
-     placeholder="descripcion"
-     className="border-2 border-indigo-500 outline-0 focus:border-indigo-700 rounder-nd p-2 w-full max-w-nd "
-     value={card.descripcion}
-     onChange={(e) => setCard({...card , descripcion: e.target.value})}
-      />
-      {errors.descripcion && <p className="text-red-500">{errors.descripcion}</p>}
-     
-     <input type="number"
-     placeholder="numero"
-     className="border-2 border-indigo-500 outline-0 focus:border-indigo-700 rounder-nd p-2 w-full max-w-nd "
-     value={card.numero}
-     onChange={(e) => setCard({...card , numero:Number( e.target.value)})}
-      /> 
-      {errors.numero && <p className="text-red-500">{errors.numero}</p>}
-
-      <input type="text"
-     placeholder="tipo"
-     className="border-2 border-indigo-500 outline-0 focus:border-indigo-700 rounder-nd p-2 w-full max-w-nd "
-     value={card.tipo}
-     onChange={(e) => setCard({...card , tipo: e.target.value})}
-      /> 
-      {errors.tipo && <p className="text-red-500">{errors.tipo}</p>}
-
-      <input type="number"
-     placeholder="defensa"
-     className="border-2 border-indigo-500 outline-0 focus:border-indigo-700 rounder-nd p-2 w-full max-w-nd "
-     value={card.defensa}
-     onChange={(e) => setCard({...card , defensa:Number( e.target.value)})}
-      />  
-      {errors.defensa && <p className="text-red-500">¨{errors.defensa}</p>}
+ const getPokemon = async () => {
+   try {
+     const response = await fetch(
+       "https://pokeapi.co/api/v2/pokemon/ditto"
+     );
+     const data = await response.json();
+     setPokemon(data);
+     setLoading(false);
+   } catch (error) {
+     console.error("Error fetching pokemon", error);
+     setLoading(false);
+   }
+ };
 
 
-      <input type="number"
-     placeholder="ataque"
-     className="border-2 border-indigo-500 outline-0 focus:border-indigo-700 rounder-nd p-2 w-full max-w-nd "
-     value={card.ataque}
-     onChange={(e) => setCard({...card , ataque:Number(e.target.value)})}
-      />
-      {errors.ataque && <p className="text-red-500">{errors.ataque}</p>}
-      
-      <input type="text"
-     placeholder="imagen"
-     className="border-2 border-indigo-500 outline-0 focus:border-indigo-700 rounder-nd p-2 w-full max-w-nd "
-     value={card.imagen}
-     onChange={(e) => setCard({...card , imagen: e.target.value})}
-      />
-      {errors.imagen && <p className="text-red-500">{errors.imagen}</p>}
-
-      <button
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      onClick={validateCard}
-      >
-        validar
-      </button>
-
-      
-      
-      
-     
-      
-      
-      
-
-      
-
-
-    
-    
+ if (loading) {
+   return (
+     <div className="flex w-screen h-screen items-center justify-center bg-gray-50">
+       <div className="text-gray-500">Loading...</div>
      </div>
-     
-    
-
-     ) }
+   );
+ }
 
 
-     
-export default App
+ return (
+   <div className="flex w-screen min-h-screen p-4 justify-center items-center bg-gray-50">
+     {pokemon && (
+       <div className="bg-white rounded-xl shadow-lg overflow-hidden w-80 border-2 border-gray-200">
+         {/* Header */}
+         <div className="bg-purple-100 p-4">
+           <div className="flex justify-between items-center">
+             <h1 className="text-2xl font-bold text-gray-800 capitalize">
+               {pokemon.name}
+             </h1>
+             <div className="bg-white text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm">
+               #{pokemon.id}
+             </div>
+           </div>
+         </div>
+
+
+         {/* Image */}
+         <div className="flex justify-center p-4 bg-white">
+           <img
+             src={pokemon.sprites.other["official-artwork"].front_default}
+             alt={pokemon.name}
+             className="w-48 h-48"
+           />
+         </div>
+
+
+         {/* Type */}
+         <div className="px-4 pt-2">
+           <div className="flex gap-2 justify-center">
+             {pokemon.types.map((typeInfo, index) => (
+               <span
+                 key={index}
+                 className="px-4 py-1 bg-purple-400 text-blue-800 rounded-full text-sm font-medium"
+               >
+                 {typeInfo.type.name}
+               </span>
+             ))}
+           </div>
+         </div>
+
+
+         {/* Stats */}
+         <div className="p-4">
+           <div className="grid grid-cols-2 gap-3 mb-4">
+             <div className="text-center p-2 bg-gray-50 rounded">
+               <div className="text-gray-500 text-xs">Height</div>
+               <div className="font-bold">{pokemon.height / 10} m</div>
+             </div>
+             <div className="text-center p-2 bg-gray-50 rounded">
+               <div className="text-gray-500 text-xs">Weight</div>
+               <div className="font-bold">{pokemon.weight / 10} kg</div>
+             </div>
+           </div>
+         </div>
+       </div>
+     )}
+   </div>
+ );
+}
+
+
+export default App;
